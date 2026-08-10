@@ -58,6 +58,18 @@ export class RevelationTracker {
     // Store the revelation
     this.revelations.set(revelation.id, revelation);
 
+    // Set proper iteration number based on chain position
+    if (revelation.previousRevelationId) {
+      const prev = this.revelations.get(revelation.previousRevelationId);
+      if (prev) {
+        revelation.iteration = prev.iteration + 1;
+      } else {
+        revelation.iteration = 1;
+      }
+    } else if (revelation.iteration < 0) {
+      revelation.iteration = 1;
+    }
+
     // Determine: does this extend an existing chain or start a new one?
     const chain = this.findChainForRevelation(revelation);
 

@@ -568,6 +568,31 @@ describe("RevelationTracker", () => {
     }
   });
 
+  it("sets proper iteration numbers for chained revelations", () => {
+    const rev1 = createRevelation("flash", "First insight about tiles", "Next?", 0.7);
+    tracker.record(rev1);
+
+    const rev2 = createRevelation("wesley", "Building on tiles", "Deeper?", 0.8, rev1.id);
+    tracker.record(rev2);
+
+    const rev3 = createRevelation("pro", "Even deeper layer", "More?", 0.9, rev2.id);
+    tracker.record(rev3);
+
+    expect(rev1.iteration).toBe(1);
+    expect(rev2.iteration).toBe(2);
+    expect(rev3.iteration).toBe(3);
+  });
+
+  it("does not leave iteration as -1 when previousRevelationId is set", () => {
+    const rev1 = createRevelation("flash", "Base insight", "What next?", 0.5);
+    tracker.record(rev1);
+
+    const rev2 = createRevelation("wesley", "Next layer", "Further?", 0.7, rev1.id);
+    tracker.record(rev2);
+
+    expect(rev2.iteration).toBeGreaterThan(0);
+  });
+
   it("exports a readable revelation map", () => {
     const rev1 = createRevelation("flash", "First revelation about tiles", "What about triggers?", 0.7, undefined, ["flash", "wesley"]);
     tracker.record(rev1);
