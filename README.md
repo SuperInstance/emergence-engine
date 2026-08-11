@@ -109,7 +109,19 @@ src/
 └── index.ts                 — Barrel export
 
 tests/
-└── emergence.test.ts        — 36 tests
+├── emergence.test.ts             — 38 integration tests
+├── examples.test.ts              — 11 example scenario tests
+├── predictability-estimator.test.ts — 25 profiling & scoring tests
+├── emergence-detector.test.ts    — 33 pattern detection tests
+├── interruption-system.test.ts   — 29 generator & hunger tests
+├── revelation-tracker.test.ts    — 44 chain & relationship tests
+└── groupthink-monitor.test.ts    — 38 classification & scoring tests
+
+docs/
+├── API.md                   — Full API reference
+└── TESTING.md               — Testing guide
+
+Total: 218 tests across 7 files
 ```
 
 ## Use

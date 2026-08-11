@@ -14,7 +14,7 @@ npm install
 npm test
 ```
 
-All 49 tests should pass. If any fail, open an issue.
+All 218 tests should pass. If any fail, open an issue.
 
 ## Running Examples
 
