@@ -88,7 +88,7 @@ const generateNewModelInterruption: InterruptionGenerator = (flow, ctx) => {
     source: "new_model",
     whatItBreaks: "The current approach constrained by previous model capabilities",
     whatItOffers: "A more capable model is now available — retry with better reasoning",
-    quality: 0.8,
+    quality: 0.92,
     accepted: false,
     timestamp: new Date().toISOString(),
   };
