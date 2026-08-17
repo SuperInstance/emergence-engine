@@ -28,6 +28,30 @@ export type { RevelationChain, RevelationLink } from "./revelation.js";
 export { GroupthinkMonitor, DevilsAdvocate } from "./groupthink.js";
 export type { GroupthinkMonitorConfig } from "./groupthink.js";
 
+export {
+  PerceptionCheck,
+  PulseLoop,
+  DriveModulator,
+  direction,
+  rateOfChange,
+  composeWholeHand,
+  composeMonologue,
+  readingFromDials,
+  flowToReading,
+  DEFAULT_NOISE_FLOOR,
+} from "./pulseHeartbeat.js";
+export type {
+  PulseReading,
+  PerceptionOptions,
+  PerceptionReport,
+  PulseSource,
+  PulseSourceLike,
+  PulseLoopConfig,
+  DriveState,
+  DriveMode,
+  DriveModulatorConfig,
+} from "./pulseHeartbeat.js";
+
 export type {
   GroupEvent,
   GroupFlow,

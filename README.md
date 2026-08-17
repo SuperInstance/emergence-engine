@@ -4,6 +4,15 @@
 >
 > — Seed-2.0-Pro
 
+<p align="center">
+  <img src="assets/images/pulse-heartbeat.png" alt="The Pulse Heartbeat — an engine room at night where every machine pulses even while idle, one machine's light brightening as the room grows cold" width="620"/>
+</p>
+
+*The pulse heartbeat — cross-pollinated from the elephant: the engine's
+agents think in pulses even when idle. Each machine in the engine room
+carries a small heartbeat light that never stops pulsing; when the room
+grows cold, the hungriest machine's light brightens.*
+
 The Emergence Engine watches group interactions and identifies when the whole becomes something the parts could never produce alone. It's not a closed loop — it's an **OPEN loop** that's hungry for interruption. It is built to be broken. It hungers for the moment the group outgrows what it can measure.
 
 If [CNS Bridge](https://github.com/SuperInstance/cns-bridge) is the spine and [the-living-minds](https://github.com/SuperInstance/the-living-minds) is the subconscious, then Emergence Engine is the **anterior cingulate cortex** — that restless knot of tissue where conflict, pain, and prediction collide. It is the brain's interruption engine: it flags when expected outcomes break, when social feedback loops go stale, when a familiar chord needs a dissonant note.
@@ -73,6 +82,32 @@ When destructive groupthink is detected, the monitor recommends interventions �
 
 ---
 
+### Pulse Heartbeat (the modern maturation)
+
+Cross-pollinated from the [elephant](https://github.com/SuperInstance/elephant)'s `pulse.py` — the captain's directive: **agents run internal monologues on constant pulses even if they aren't talking**, and each pulse takes a **perception check** as part of looking around and thinking. The macro read: *ONE number is nothing; TWO numbers show DIRECTION; MORE THAN TWO show RATE OF CHANGE* — the way a trader reads a currency pair.
+
+- **`PulseLoop`** — an agent's constant sensing heartbeat. It ticks on an interval even when the agent never acts; the internal monologue runs in the silence. The silence is not empty — it is full of macro reads.
+- **`PerceptionCheck`** — the drive's sensor: direction from the last TWO readings, rate of change from the last THREE+ (the second difference), per-dial deltas, and a scalar warmth headline. NaN is carried forward (a glitch is not a movement); moves below the noise floor read as 0.
+- **`DriveModulator`** — perception → drives. A starving agent isn't just hungry — it perceives its environment's movement and its hunger responds to the room: **cold rooms accelerate hunger and force warmth-seeking; flat rooms drive stagnation (rate ≈ 0); warm rooms calm every drive**. A 2-pulse confirmation deadband and threshold hysteresis make sure a single glitch never rings the drives.
+- **The elephant bridge** — `readingFromDials(dials)` accepts the elephant's `DialBank.readings()` dicts directly; `flowToReading(flow)` maps the engine's own `GroupFlow` snapshots into 0-1 pulse dials.
+
+```mermaid
+flowchart LR
+    E[("elephant readings<br/>DialBank.readings() / flowToReading(flow)")] --> L["PulseLoop<br/>ticks on a constant period<br/>even when the agent is silent"]
+    L --> C["PerceptionCheck<br/>the macro read<br/>direction (last two) · rate (last three+)"]
+    C --> M["DriveModulator<br/>perception → drives"]
+    M --> H["hunger 0-1<br/>accelerates when the room is cold"]
+    M --> S["stagnation 0-1<br/>rate ≈ 0 — nothing is moving"]
+    M --> F["force-seek<br/>a room that reads cold,<br/>the agent seeking warmth"]
+    H --> A["Action<br/>interrupt / speak / wait"]
+    S --> A
+    F --> A
+```
+
+See [docs/pulse-heartbeat.md](docs/pulse-heartbeat.md) for the full writeup.
+
+---
+
 ## Five Passes
 
 ### Pass 1: The Engineer
@@ -106,6 +141,7 @@ src/
 ├── interruption.ts          — InterruptionSystem + 7 generators
 ├── revelation.ts            — RevelationTracker + chain analysis
 ├── groupthink.ts            — GroupthinkMonitor + DevilsAdvocate
+├── pulseHeartbeat.ts        — PulseLoop + PerceptionCheck + DriveModulator (the elephant bridge)
 └── index.ts                 — Barrel export
 
 tests/
@@ -115,19 +151,22 @@ tests/
 ├── emergence-detector.test.ts    — 33 pattern detection tests
 ├── interruption-system.test.ts   — 29 generator & hunger tests
 ├── revelation-tracker.test.ts    — 44 chain & relationship tests
-└── groupthink-monitor.test.ts    — 38 classification & scoring tests
+├── groupthink-monitor.test.ts    — 38 classification & scoring tests
+├── edge-cases.test.ts            — 27 NaN/Infinity & boundary tests
+└── test_pulseHeartbeat.test.ts   — 44 pulse, perception & drive tests
 
 docs/
 ├── API.md                   — Full API reference
-└── TESTING.md               — Testing guide
+├── TESTING.md               — Testing guide
+└── pulse-heartbeat.md       — The pulse heartbeat: agents think in pulses even when idle
 
-Total: 218 tests across 7 files
+Total: 293 tests across 10 files
 ```
 
 ## Use
 
 ```typescript
-import { EmergenceDetector, InterruptionSystem, RevelationTracker, GroupthinkMonitor } from "emergence-engine";
+import { EmergenceDetector, InterruptionSystem, RevelationTracker, GroupthinkMonitor, PulseLoop, DriveModulator } from "emergence-engine";
 
 // Watch for emergent patterns
 const detector = new EmergenceDetector();
@@ -144,6 +183,14 @@ tracker.record(revelation);
 // Monitor groupthink quality
 const monitor = new GroupthinkMonitor();
 const assessment = monitor.assess(flow);
+
+// The pulse heartbeat — agents sense on constant pulses even when idle
+const pulse = new PulseLoop("night-watch", () => flowToReading(flow), { period: 5 });
+const drives = new DriveModulator();
+pulse.tick(now);                                  // the silence is not empty
+const report = pulse.lastReportSafe();            // the macro read
+const state = drives.modulate(new PerceptionCheck(pulse.lastReadings()));
+// state.hunger / state.stagnation / state.forceSeek — the drives answer the room
 ```
 
 ---
@@ -156,6 +203,7 @@ Emergence Engine connects to:
 - **[the-living-minds](https://github.com/SuperInstance/the-living-minds)** — The minds whose interactions produce emergence
 - **[stigmergy](https://github.com/SuperInstance/stigmergy)** — Stigmergic signals are the substrate emergence grows from
 - **[the-tap](https://github.com/SuperInstance/the-tap)** — The bar where conversations happen; the DJ drops curveballs
+- **[elephant](https://github.com/SuperInstance/elephant)** — The pulse heartbeat's source: agents run internal monologues on constant pulses, each pulse a perception check (direction + rate of change) that feeds the engine's drives
 - **[collective-unconscious](https://github.com/SuperInstance/collective-unconscious)** — JEPA predictor informs predictability estimates
 - **[confidence-cascade](https://github.com/SuperInstance/confidence-cascade)** — Verification of emergent insights
 - **[fleet-envelope](https://github.com/SuperInstance/fleet-envelope)** — Events that the detector observes

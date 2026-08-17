@@ -399,3 +399,93 @@ function createRevelation(
 ```
 
 Factory function for creating revelations. Clamps `openness` to [0, 1]. Sets `iteration` to -1 when `previousRevelationId` is provided (the tracker sets the correct value on record).
+
+---
+
+## Pulse Heartbeat
+
+Cross-pollinated from the elephant's `pulse.py`: agents run internal monologues on **constant pulses** even when they aren't talking, and each pulse takes a **perception check** — ONE number is nothing; TWO numbers show DIRECTION; MORE THAN TWO show RATE OF CHANGE.
+
+### `PerceptionCheck`
+
+The macro read of a pulse series — the drive's sensor.
+
+```typescript
+new PerceptionCheck(series, opts?): PerceptionCheck
+// opts: { noiseFloor?, ts?, warmthDials? }
+```
+
+| Field | What it is | From |
+|-------|-----------|------|
+| `direction` | per-dial movement (`d = x[-1] − x[-2]`) | last TWO readings |
+| `rateOfChange` | per-dial second difference (quadratic interpolant acceleration) | last THREE+ readings |
+| `dialDeltas` | per-dial `{ direction, rate }` pairs | both of the above |
+| `warmth` | scalar warmth — mean of `warmthDials` (default all) in the latest reading | the latest reading |
+| `warmthDirection` | is the room warming or cooling? the headline | warmth series, last two |
+| `warmthRate` | is that movement accelerating or easing? | warmth series, last three+ |
+| `isFlat` / `isCooling` / `isWarming` | convenience reads | direction/rate vs noise floor |
+
+NaN is carried forward from the last valid reading (a glitch is NOT a movement); moves below `noiseFloor` (default 0.02) read as 0.
+
+### `direction` / `rateOfChange`
+
+```typescript
+direction(series, opts?): Record<string, number>       // per-dial movement, last two
+rateOfChange(series, opts?): Record<string, number>    // per-dial second difference, last three+
+// opts: { noiseFloor?, ts? } — with ts, values are per second / per second²
+```
+
+### `PulseLoop`
+
+An agent's constant sensing heartbeat — ticks even when the agent never acts.
+
+```typescript
+new PulseLoop(agentId, source, config?): PulseLoop
+// source: PulseSource | (() => PulseReading)
+//   PulseSource = { read(): PulseReading; traffic?(): number; agentSaid?(): boolean }
+// config: { period? (5), history? (20), noiseFloor? (0.02), warmthDials? }
+```
+
+| Method | What it does |
+|--------|-------------|
+| `tick(now?)` | one pulse: read the room, record, run the perception check → `PerceptionReport`. Stale ticks (≤ last tick) are ignored |
+| `pulse()` | one tick on the internal clock (advances by `period` each beat) |
+| `due(now)` | is a pulse due? (seam for attention-triggered pulsing) |
+| `internalMonologue(prompt?)` | the silent thinking — 1-3 sentences, runs even when the agent says nothing |
+| `lastReportSafe()` | the most recent `PerceptionReport` (null before the first tick) |
+| `lastReadings()` | the raw pulse series (bounded by `history`) |
+
+### `DriveModulator`
+
+Perception → drives. Stateful; `modulate(check)` accumulates across pulses (clamped 0-1).
+
+```typescript
+new DriveModulator(config?): DriveModulator
+// config: { noiseFloor?, confirmPulses? (2), coldEnterThreshold? (0.33),
+//           coldExitThreshold? (0.38), warmEnterThreshold? (0.62),
+//           warmExitThreshold? (0.57), seekDirectionThreshold? (0.08),
+//           hungerGainCold? (0.06), hungerGainColdFlat? (0.03),
+//           hungerDecayWarm? (0.08), stagnationGainFlat? (0.08),
+//           stagnationDecayMoving? (0.05) }
+```
+
+| Method | What it does |
+|--------|-------------|
+| `modulate(check)` | one pulse's drive update → `DriveState` |
+| `state()` | the current drives without advancing |
+| `reset()` | clears hunger/stagnation and the confirmation memory |
+
+`DriveState` = `{ hunger: 0-1, stagnation: 0-1, forceSeek: boolean, mode: "cold" \| "flat" \| "warm" \| "seeking" \| "calm" }`.
+
+Semantics: **cold** rooms accelerate hunger and fire force-seek (the agent seeks warmth; cold-and-flat is the worst state — hunger *and* despair); **direction pointing to warmth** fires force-seek without hunger (seeking is the response, not a trigger); **flat** rooms accumulate stagnation (rate ≈ 0 — nothing is moving); **warm** rooms calm every drive. A reading must confirm for `confirmPulses` consecutive pulses before drives ring (the deadband — a single glitch never changes behaviour), and the warmth thresholds carry hysteresis so a room hovering at a boundary doesn't ping-pong.
+
+### The bridge
+
+```typescript
+readingFromDials(dials): PulseReading
+// accepts: a plain dial dict (DialBank.readings() shape), a bank-like object
+// with .readings(room?), or a reader object with .read(room?)
+flowToReading(flow: GroupFlow): PulseReading
+// maps a GroupFlow into 0-1 dials: energy, convergence, diversity,
+// disagreement, novelty, crossPollination, exchange
+```
