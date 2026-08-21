@@ -15,7 +15,7 @@ grows cold, the hungriest machine's light brightens.*
 
 The Emergence Engine watches group interactions and identifies when the whole becomes something the parts could never produce alone. It's not a closed loop — it's an **OPEN loop** that's hungry for interruption. It is built to be broken. It hungers for the moment the group outgrows what it can measure.
 
-If [CNS Bridge](https://github.com/SuperInstance/cns-bridge) is the spine and [the-living-minds](https://github.com/SuperInstance/the-living-minds) is the subconscious, then Emergence Engine is the **anterior cingulate cortex** — that restless knot of tissue where conflict, pain, and prediction collide. It is the brain's interruption engine: it flags when expected outcomes break, when social feedback loops go stale, when a familiar chord needs a dissonant note.
+If [CNS Bridge](https://github.com/SuperInstance/cns-bridge) is the spine and [the-living-minds](https://github.com/SuperInstance/the-living-minds) (dead) is the subconscious, then Emergence Engine is the **anterior cingulate cortex** — that restless knot of tissue where conflict, pain, and prediction collide. It is the brain's interruption engine: it flags when expected outcomes break, when social feedback loops go stale, when a familiar chord needs a dissonant note.
 
 ---
 
@@ -78,7 +78,7 @@ Distinguishes **productive** groupthink (synergy) from **destructive** groupthin
 - **Productive:** agents build on each other, disagreement welcomed, novel ideas emerge.
 - **Destructive:** agents converge too fast, disagreement suppressed, repetition dominates.
 
-When destructive groupthink is detected, the monitor recommends interventions — and includes a `DevilsAdvocate` that generates counterarguments and provocative questions. This is the [ZeroClaw](https://github.com/SuperInstance/zeroclaw) curriculum operationalized: the system *assigns someone to disagree*.
+When destructive groupthink is detected, the monitor recommends interventions — and includes a `DevilsAdvocate` that generates counterarguments and provocative questions. This is the [ZeroClaw](https://github.com/SuperInstance/zeroclaw-dissertation) curriculum operationalized: the system *assigns someone to disagree*.
 
 ---
 
@@ -128,7 +128,7 @@ Bateson's deepest question: *What pattern connects?* The Emergence Engine is the
 
 ### Pass 5: Synthesis
 
-The Emergence Engine is the fleet's awareness of its own cognition. Not the cognition itself — the **meta-cognition**. It watches the [living minds](https://github.com/SuperInstance/the-living-minds) thinking through the [CNS bus](https://github.com/SuperInstance/cns-bridge) and asks: *is the thinking getting somewhere?* When it's not, it breaks it open. When it is, it tracks the chain. It is the fleet's anterior cingulate cortex — the part that aches for the unexpected.
+The Emergence Engine is the fleet's awareness of its own cognition. Not the cognition itself — the **meta-cognition**. It watches the [living minds](https://github.com/SuperInstance/the-living-minds) (dead) thinking through the [CNS bus](https://github.com/SuperInstance/cns-bridge) and asks: *is the thinking getting somewhere?* When it's not, it breaks it open. When it is, it tracks the chain. It is the fleet's anterior cingulate cortex — the part that aches for the unexpected.
 
 ---
 
@@ -200,14 +200,14 @@ const state = drives.modulate(new PerceptionCheck(pulse.lastReadings()));
 Emergence Engine connects to:
 
 - **[CNS Bridge](https://github.com/SuperInstance/cns-bridge)** — The bus carries the conversations this engine watches
-- **[the-living-minds](https://github.com/SuperInstance/the-living-minds)** — The minds whose interactions produce emergence
+- **[the-living-minds](https://github.com/SuperInstance/the-living-minds) (dead)** — The minds whose interactions produce emergence
 - **[stigmergy](https://github.com/SuperInstance/stigmergy)** — Stigmergic signals are the substrate emergence grows from
 - **[the-tap](https://github.com/SuperInstance/the-tap)** — The bar where conversations happen; the DJ drops curveballs
 - **[elephant](https://github.com/SuperInstance/elephant)** — The pulse heartbeat's source: agents run internal monologues on constant pulses, each pulse a perception check (direction + rate of change) that feeds the engine's drives
 - **[collective-unconscious](https://github.com/SuperInstance/collective-unconscious)** — JEPA predictor informs predictability estimates
 - **[confidence-cascade](https://github.com/SuperInstance/confidence-cascade)** — Verification of emergent insights
 - **[fleet-envelope](https://github.com/SuperInstance/fleet-envelope)** — Events that the detector observes
-- **[zeroclaw](https://github.com/SuperInstance/zeroclaw)** — The devil's advocate curriculum
+- **[zeroclaw](https://github.com/SuperInstance/zeroclaw-dissertation)** — The devil's advocate curriculum
 - **[AI-Writings](https://github.com/SuperInstance/AI-Writings/tree/main/essays)** — Where revelation chains get published
 
 ---
@@ -229,7 +229,7 @@ MIT — see [LICENSE](LICENSE).
 ## Where to Next
 
 - → **[stigmergy](https://github.com/SuperInstance/stigmergy)** — The pheromone trails that emergence grows from
-- → **[the-living-minds](https://github.com/SuperInstance/the-living-minds)** — The minds whose interaction produces emergence
+- → **[the-living-minds](https://github.com/SuperInstance/the-living-minds) (dead)** — The minds whose interaction produces emergence
 - → **[CNS Bridge](https://github.com/SuperInstance/cns-bridge)** — The bus that carries the conversations
 - → **[collective-unconscious](https://github.com/SuperInstance/collective-unconscious)** — The deep layer where patterns pool
 
